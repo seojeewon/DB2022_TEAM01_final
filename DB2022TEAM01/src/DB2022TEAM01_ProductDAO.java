@@ -246,7 +246,7 @@ public class DB2022TEAM01_ProductDAO {
     public boolean buyProduct(Long productId){
         Connection conn = getConnection();
         String SQL = "update DB2022_product set isSold = true where id = ?;";
-        String SQL2 = "update DB2022_trade set buyer_id = ? where product_id = ?;";
+        String SQL2 = "update DB2022_trade set buyer_id = ?, buyer_name = ? where product_id = ?;";
 
         try{
             conn.setAutoCommit(false);
@@ -256,8 +256,11 @@ public class DB2022TEAM01_ProductDAO {
 
             ps = conn.prepareStatement(SQL2);
             Long userId = logInFunc.getLogInUser();
+            String username = logInFunc.getLogInUserName(userId);
             ps.setLong(1, userId);
-            ps.setLong(2, productId);
+            ps.setString(2, username);
+            ps.setLong(3, productId);
+
 
             ps.executeUpdate();
             conn.commit();
